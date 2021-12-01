@@ -40,7 +40,7 @@ public class OfflineVerify {
         try {
             jws = JsonWebSignature.parser(JacksonFactory.getDefaultInstance())
                     .setPayloadClass(AttestationStatement.class).parse(signedAttestationStatment);
-        } catch (IOException e) {
+        } catch (IOException | IllegalArgumentException e) {
             System.err.println("Failure: " + signedAttestationStatment + " is not valid JWS " +
                     "format.");
             return null;
@@ -99,7 +99,7 @@ public class OfflineVerify {
         AttestationStatement stmt = parseAndVerify(signedAttestationStatement);
         if (stmt == null) {
             System.err.println("Failure: Failed to parse and verify the attestation statement.");
-            return null;
+            return new AttestationStatement();
         }
 
         /*
